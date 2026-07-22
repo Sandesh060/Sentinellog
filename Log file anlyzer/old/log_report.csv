@@ -1,0 +1,15 @@
+Category,Item,Count
+Top IP,1.1.1.1,5
+Top IP,192.168.1.194,2
+Top IP,192.168.1.82,2
+Top IP,192.168.1.126,2
+Top IP,192.168.1.246,2
+Top IP,192.168.1.170,2
+Top IP,192.168.1.106,1
+Top IP,192.168.1.207,1
+Top IP,192.168.1.252,1
+Top IP,192.168.1.188,1
+Top Endpoint,/home,50
+Top Endpoint,/login,5
+Top Endpoint,/../../etc/passwd,1
+Top Endpoint,/index.html,1

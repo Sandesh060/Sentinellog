@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
+<title>SentinelLog &mdash; 2026-05-12 10:54:48</title>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js'></script>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Courier New',monospace;background:#0d1117;color:#c9d1d9;padding:2rem;min-height:100vh}
+.topbar{display:flex;align-items:center;gap:10px;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid #21262d}
+.topbar-title{font-size:14px;font-weight:700;color:#c9d1d9;letter-spacing:.12em;text-transform:uppercase}
+.topbar-badge{font-size:11px;padding:3px 10px;border-radius:4px;background:#1f0f0f;color:#f85149;font-weight:600}
+.topbar-badge.ok{background:#0d1f12;color:#3fb950}
+.topbar-time{margin-left:auto;font-size:11px;color:#8b949e}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.5rem}
+.metric{background:#161b22;border:1px solid #21262d;border-radius:8px;padding:14px 16px}
+.metric-label{font-size:10px;color:#8b949e;letter-spacing:.07em;text-transform:uppercase;margin-bottom:6px}
+.metric-value{font-size:24px;font-weight:700;color:#c9d1d9}
+.metric-sub{font-size:10px;color:#8b949e;margin-top:3px}
+.metric.danger .metric-value{color:#f85149}
+.metric.warn .metric-value{color:#d29922}
+.metric.ok .metric-value{color:#3fb950}
+.tabs{display:flex;gap:4px;margin-bottom:1.5rem}
+.tab{font-size:12px;padding:6px 16px;border-radius:5px;border:1px solid #30363d;cursor:pointer;
+     color:#8b949e;background:transparent;font-family:'Courier New',monospace;transition:all .15s}
+.tab:hover{background:#161b22;color:#c9d1d9}
+.tab.active{background:#21262d;color:#c9d1d9;font-weight:700;border-color:#444c56}
+.pane{display:none}.pane.active{display:block}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px}
+.panel{background:#0d1117;border:1px solid #21262d;border-radius:10px;padding:1rem 1.25rem}
+.panel-header{display:flex;align-items:center;gap:8px;margin-bottom:1rem;padding-bottom:10px;border-bottom:1px solid #21262d}
+.panel-title{font-size:11px;font-weight:700;color:#8b949e;letter-spacing:.08em;text-transform:uppercase}
+.panel-count{margin-left:auto;font-size:10px;color:#8b949e}
+.fullpanel{margin-bottom:12px}
+.ip-row,.method-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #21262d;font-size:12px}
+.ip-row:last-child,.method-row:last-child{border-bottom:none}
+.ip-addr,.method-label{font-family:'Courier New',monospace;color:#c9d1d9;min-width:110px;font-size:11px}
+.bar-wrap{flex:1;background:#161b22;border-radius:3px;height:6px;overflow:hidden}
+.bar{height:100%;border-radius:3px}
+.ip-count,.method-count{font-size:11px;color:#8b949e;min-width:28px;text-align:right}
+.ep-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #21262d;font-size:11px}
+.ep-row:last-child{border-bottom:none}
+.ep-path{font-family:'Courier New',monospace;color:#c9d1d9;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ep-path.danger{color:#f85149}
+.ep-count{color:#8b949e;min-width:28px;text-align:right}
+.tag{font-size:10px;padding:2px 6px;border-radius:3px;margin-left:4px;font-weight:600}
+.tag.danger{background:#1f0f0f;color:#f85149}
+.status-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.sc{padding:10px;border-radius:8px;text-align:center}
+.sc.s2{background:#0d1f12}.sc.s3{background:#0d1626}.sc.s4{background:#1c1507}.sc.s5{background:#1f0f0f}
+.sc-num{font-size:18px;font-weight:700}
+.sc.s2 .sc-num{color:#3fb950}.sc.s3 .sc-num{color:#378ADD}.sc.s4 .sc-num{color:#d29922}.sc.s5 .sc-num{color:#f85149}
+.sc-lbl{font-size:10px;margin-top:3px}
+.sc.s2 .sc-lbl{color:#3fb950}.sc.s3 .sc-lbl{color:#378ADD}.sc.s4 .sc-lbl{color:#d29922}.sc.s5 .sc-lbl{color:#f85149}
+.alert-box{background:#1f0f0f;border:1px solid #f85149;border-radius:6px;padding:10px 14px;
+           margin-bottom:10px;display:flex;align-items:flex-start;gap:10px}
+.alert-icon{color:#f85149;font-size:16px;font-weight:700;margin-top:1px}
+.alert-title{font-size:12px;font-weight:600;color:#f85149;margin-bottom:2px}
+.alert-desc{font-size:11px;color:#f85149;opacity:.8}
+.ok-box{background:#0d1f12;border:1px solid #238636;border-radius:6px;padding:12px 16px;
+        font-size:12px;color:#3fb950;line-height:1.6}
+table{width:100%;border-collapse:collapse;font-size:11px}
+thead tr{border-bottom:1px solid #30363d}
+th{text-align:left;padding:0 0 8px;color:#8b949e;font-weight:500;font-size:10px;
+   text-transform:uppercase;letter-spacing:.06em}
+td{padding:7px 0;border-bottom:1px solid #21262d;color:#c9d1d9}
+tr:last-child td{border-bottom:none}
+.mono{font-family:'Courier New',monospace}
+.chartbox{position:relative;width:100%;height:200px;margin-top:.5rem}
+.chartbox-lg{position:relative;width:100%;height:260px;margin-top:.5rem}
+.stat-line{display:flex;justify-content:space-between;padding:5px 0;
+           border-bottom:1px solid #21262d;font-size:11px}
+.stat-line:last-child{border-bottom:none}
+.stat-key{color:#8b949e}.stat-val{color:#c9d1d9;font-weight:600}
+footer{margin-top:3rem;font-size:10px;color:#30363d;border-top:1px solid #21262d;padding-top:1rem}
+@media(max-width:800px){.metrics{grid-template-columns:1fr 1fr}.grid2,.grid3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class='topbar'><span style='font-size:18px'>&#128737;</span><span class='topbar-title'>SentinelLog</span><span class='topbar-badge ok'>&#10003; All clear</span><span class='topbar-time'>Generated 2026-05-12 10:54:48</span></div>
+<div class='tabs'><button class='tab active' onclick="switchTab('overview')">Overview</button><button class='tab' onclick="switchTab('security')">Security</button><button class='tab' onclick="switchTab('traffic')">Traffic</button></div>
+<div id='pane-overview' class='pane active'><div class='metrics'><div class='metric'><div class='metric-label'>Total requests</div><div class='metric-value'>105</div><div class='metric-sub'>all entries parsed</div></div><div class='metric'><div class='metric-label'>Unique IPs</div><div class='metric-value'>3</div><div class='metric-sub'>distinct sources</div></div><div class='metric ok'><div class='metric-label'>Flagged IPs</div><div class='metric-value'>0</div><div class='metric-sub'>threats detected</div></div><div class='metric ok'><div class='metric-label'>Error rate</div><div class='metric-value'>0.95%</div><div class='metric-sub'>4xx + 5xx</div></div></div><div class='grid2'><div class='panel'><div class='panel-header'><span class='panel-title'>Top IP addresses</span><span class='panel-count'>3 shown</span></div><div class="ip-row"><span class="ip-addr">::1</span><div class="bar-wrap"><div class="bar" style="width:100%;background:#378ADD"></div></div><span class="ip-count">58</span></div><div class="ip-row"><span class="ip-addr">127.0.0.1</span><div class="bar-wrap"><div class="bar" style="width:64%;background:#378ADD"></div></div><span class="ip-count">37</span></div><div class="ip-row"><span class="ip-addr">192.168.71.105</span><div class="bar-wrap"><div class="bar" style="width:17%;background:#378ADD"></div></div><span class="ip-count">10</span></div></div><div class='panel'><div class='panel-header'><span class='panel-title'>HTTP methods</span></div><div class="method-row"><span class="method-label">GET</span><div class="bar-wrap"><div class="bar" style="width:100%;background:#378ADD"></div></div><span class="method-count">105</span></div><div style='margin-top:1rem;padding-top:10px;border-top:1px solid #21262d'><div class='panel-title' style='margin-bottom:8px'>Quick stats</div><div class='stat-line'><span class='stat-key'>Mean req/hour</span><span class='stat-val'>13.1</span></div><div class='stat-line'><span class='stat-key'>Std dev (σ)</span><span class='stat-val'>7.9</span></div><div class='stat-line'><span class='stat-key'>Traffic spikes</span><span class='stat-val'>0</span></div><div class='stat-line'><span class='stat-key'>3xx redirects</span><span class='stat-val'>9</span></div></div></div></div><div class='panel fullpanel'><div class='panel-header'><span class='panel-title'>Top endpoints</span></div><div class="ep-row"><span class="ep-path">/hello.html</span><span class="ep-count">22</span></div><div class="ep-row"><span class="ep-path">/</span><span class="ep-count">3</span></div><div class="ep-row"><span class="ep-path">/dashboard/</span><span class="ep-count">3</span></div><div class="ep-row"><span class="ep-path">/dashboard/stylesheets/normalize.css</span><span class="ep-count">3</span></div><div class="ep-row"><span class="ep-path">/dashboard/stylesheets/all.css</span><span class="ep-count">3</span></div><div class="ep-row"><span class="ep-path">/dashboard/javascripts/modernizr.js</span><span class="ep-count">3</span></div><div class="ep-row"><span class="ep-path">/dashboard/images/xampp-logo.svg</span><span class="ep-count">3</span></div><div class="ep-row"><span class="ep-path">/dashboard/images/fastly-logo.png</span><span class="ep-count">3</span></div><div class="ep-row"><span class="ep-path">/dashboard/javascripts/all.js</span><span class="ep-count">3</span></div><div class="ep-row"><span class="ep-path">/dashboard/images/social-icons.png</span><span class="ep-count">3</span></div></div><div class='panel fullpanel'><div class='panel-header'><span class='panel-title'>Status code summary</span></div><div class='status-grid'><div class='sc s2'><div class='sc-num'>95</div><div class='sc-lbl'>2xx Success</div></div><div class='sc s3'><div class='sc-num'>9</div><div class='sc-lbl'>3xx Redirect</div></div><div class='sc s4'><div class='sc-num'>1</div><div class='sc-lbl'>4xx Client Err</div></div><div class='sc s5'><div class='sc-num'>0</div><div class='sc-lbl'>5xx Server Err</div></div></div></div></div><div id='pane-security' class='pane'><div class='panel fullpanel'><div class='panel-header'><span class='panel-title' style='color:#f85149'>Security alerts</span></div><div class="ok-box">&#10003; No suspicious activity detected across all 3 source IPs.</div></div><div class='panel fullpanel'><div class='panel-header'><span class='panel-title'>IP forensics</span></div><table><thead><tr><th>IP address</th><th>Requests</th><th>Auth fails</th><th>Threats</th></tr></thead><tbody><tr><td class="mono">::1</td><td>58</td><td>0</td><td><span style="color:#3fb950">&#10003; Clean</span></td></tr><tr><td class="mono">127.0.0.1</td><td>37</td><td>0</td><td><span style="color:#3fb950">&#10003; Clean</span></td></tr><tr><td class="mono">192.168.71.105</td><td>10</td><td>0</td><td><span style="color:#3fb950">&#10003; Clean</span></td></tr></tbody></table></div></div><div id='pane-traffic' class='pane'><div class='panel fullpanel'><div class='panel-header'><span class='panel-title'>Requests per IP</span></div><div class='chartbox-lg'><canvas id='barChart'></canvas></div></div><div class='grid2'><div class='panel'><div class='panel-header'><span class='panel-title'>Endpoint distribution</span></div><div class='chartbox'><canvas id='donutChart'></canvas></div></div><div class='panel'><div class='panel-header'><span class='panel-title'>Status distribution</span></div><div class='chartbox'><canvas id='statusChart'></canvas></div></div></div><div class='panel fullpanel'><div class='panel-header'><span class='panel-title'>Traffic spikes</span></div><table><thead><tr><th>Hour</th><th>Requests</th><th>Status</th></tr></thead><tbody><tr><td colspan='3' style='color:#8b949e'>No spikes detected</td></tr></tbody></table><div style='margin-top:.75rem;font-size:10px;color:#8b949e'>Mean: 13.1 req/hr &nbsp;&middot;&nbsp; &sigma; = 7.9</div></div></div>
+<footer>SentinelLog &middot; 2026-05-12 10:54:48 &middot; 105 entries from access.log</footer>
+</body>
+</html>
+
+<script>
+function switchTab(name) {
+  document.querySelectorAll('.pane').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+  document.getElementById('pane-' + name).classList.add('active');
+  var idx = {overview: 0, security: 1, traffic: 2}[name];
+  document.querySelectorAll('.tab')[idx].classList.add('active');
+  if (name === 'traffic') initCharts();
+}
+var chartsInited = false;
+function initCharts() {
+  if (chartsInited) return;
+  chartsInited = true;
+  new Chart(document.getElementById('barChart'), {
+    type: 'bar',
+    data: {
+      labels: ["::1", "127.0.0.1", "192.168.71.105"],
+      datasets: [{ label: 'Requests', data: [58, 37, 10],
+        backgroundColor: ["#378ADD", "#378ADD", "#378ADD"], borderRadius: 5 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: '#8b949e', font: { family: 'Courier New', size: 11 } },
+             grid: { display: false }, border: { color: '#30363d' } },
+        y: { ticks: { color: '#8b949e', stepSize: 5 },
+             grid: { color: 'rgba(255,255,255,0.05)' }, border: { color: '#30363d' } }
+      }
+    }
+  });
+  new Chart(document.getElementById('donutChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ["/hello.html", "/", "/dashboard/", "/dashboard/stylesheets/normalize.css", "/dashboard/stylesheets/all.css", "/dashboard/javascripts/modernizr.js", "/dashboard/images/xampp-logo.svg", "/dashboard/images/fastly-logo.png", "/dashboard/javascripts/all.js", "/dashboard/images/social-icons.png"],
+      datasets: [{ data: [22, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+        backgroundColor: ["#378ADD", "#1D9E75", "#E24B4A", "#BA7517", "#639922", "#D4537E", "#7F77DD", "#888780", "#EF9F27", "#5DCAA5"], borderWidth: 2, borderColor: '#0d1117' }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: true, position: 'right',
+        labels: { color: '#8b949e', font: { size: 10, family: 'Courier New' },
+                  padding: 10, boxWidth: 10 } } }
+    }
+  });
+  new Chart(document.getElementById('statusChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['2xx Success','3xx Redirect','4xx Client Err','5xx Server Err'],
+      datasets: [{ data: [95,9,1,0],
+        backgroundColor: ['#3fb950','#378ADD','#d29922','#f85149'],
+        borderWidth: 2, borderColor: '#0d1117' }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: true, position: 'right',
+        labels: { color: '#8b949e', font: { size: 10, family: 'Courier New' },
+                  padding: 10, boxWidth: 10 } } }
+    }
+  });
+}
+</script>

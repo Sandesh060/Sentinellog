@@ -1,0 +1,10 @@
+category,item,count,auth_failures,threats
+Top IP,10.0.0.5,3,3,Brute Force
+Top IP,192.168.1.101,2,0,SQL Injection; Scanner UA
+Top IP,172.16.0.99,1,1,Path Traversal; Scanner UA
+Top IP,192.168.1.104,1,0,
+Top Endpoint,/login,3,,
+Top Endpoint,/index.html,1,,
+Top Endpoint,/../etc/passwd,1,,
+Top Endpoint,/api/products?id=1 OR 1=1,1,,
+Top Endpoint,/dashboard,1,,

@@ -1,0 +1,99 @@
+{
+  "total": 6,
+  "unique_ips": 4,
+  "error_rate": 66.67,
+  "hour_counts": {
+    "8": 4,
+    "9": 1,
+    "10": 1
+  },
+  "status_counts": {
+    "401": 3,
+    "200": 2,
+    "403": 1
+  },
+  "status_groups": {
+    "2xx": 2,
+    "4xx": 4
+  },
+  "top_ips": [
+    [
+      "10.0.0.5",
+      3
+    ],
+    [
+      "192.168.1.101",
+      1
+    ],
+    [
+      "172.16.0.99",
+      1
+    ],
+    [
+      "192.168.1.104",
+      1
+    ]
+  ],
+  "top_endpoints": [
+    [
+      "/login",
+      3
+    ],
+    [
+      "/index.html",
+      1
+    ],
+    [
+      "/../etc/passwd",
+      1
+    ],
+    [
+      "/dashboard",
+      1
+    ]
+  ],
+  "top_ua": [
+    [
+      "python-requests/2.28",
+      3
+    ],
+    [
+      "Mozilla/5.0 Chrome/124",
+      1
+    ],
+    [
+      "Nikto/2.1",
+      1
+    ],
+    [
+      "Mozilla/5.0 Safari/17",
+      1
+    ]
+  ],
+  "method_counts": {
+    "GET": 3,
+    "POST": 3
+  },
+  "spike_hours": {},
+  "flagged_ips": {
+    "10.0.0.5": {
+      "requests": 3,
+      "auth_failures": 3,
+      "threats": [
+        "Brute Force"
+      ],
+      "bytes": 1536
+    },
+    "172.16.0.99": {
+      "requests": 1,
+      "auth_failures": 1,
+      "threats": [
+        "Path Traversal",
+        "Scanner UA"
+      ],
+      "bytes": 256
+    }
+  },
+  "mean_rph": 2,
+  "std_rph": 1.7
+}
